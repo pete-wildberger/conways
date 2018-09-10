@@ -2,3 +2,4 @@ run.sh
 dist
 *.log
 .DS_Store
+node_modules
