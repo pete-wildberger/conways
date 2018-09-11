@@ -6,9 +6,19 @@ function resize() {
 }
 
 (function main() {
-	window.onload = () => {
-		window.addEventListener('resize', resize, false);
-	};
 	console.log('Conway App running');
-	const conway = new Conway(100, 60, 10);
+	let width: number = document.getElementById('gOL').clientWidth;
+	let height: number = document.getElementById('gOL').clientHeight;
+	window.onload = () => {
+		window.addEventListener(
+			'resize',
+			() => {
+				resize();
+				conway.setBlockSize(document.getElementById('gOL').clientWidth, document.getElementById('gOL').clientHeight);
+			},
+			false
+		);
+	};
+	const conway = new Conway(100, 100, 10, document.getElementById('gOL'), width, height);
+	setInterval(conway.turn, 2000);
 })();
