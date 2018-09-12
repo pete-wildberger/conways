@@ -6,6 +6,7 @@ const tsProject = ts.createProject('tsconfig.json');
 const source = require('vinyl-source-stream');
 const tsify = require('tsify');
 const del = require('del');
+const uglify = require('gulp-uglify-es').default;
 const paths = {
 	pages: ['src/client/*.html']
 };
@@ -37,8 +38,7 @@ gulp.task('server', () => {
 		.pipe(tsProject())
 		.js.pipe(gulp.dest('dist'));
 });
-
-gulp.task('default', ['clean', 'copy-html', 'copy-assets', 'sass', 'server'], () => {
+gulp.task('bundle', () => {
 	return browserify({
 		basedir: '.',
 		debug: true,
@@ -50,6 +50,12 @@ gulp.task('default', ['clean', 'copy-html', 'copy-assets', 'sass', 'server'], ()
 		.bundle()
 		.pipe(source('bundle.js'))
 		.pipe(gulp.dest('dist'));
+});
+gulp.task('default', ['clean', 'copy-html', 'copy-assets', 'sass', 'server', 'bundle'], () => {
+	return gulp
+		.src('dist/**/*.js')
+		.pipe(uglify({ output: { ascii_only: true } }))
+		.pipe(gulp.dest('dist/'));
 });
 
 gulp.task('sass:watch', () => {
