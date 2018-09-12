@@ -37,7 +37,9 @@ export class Conway {
       y.forEach((x: boolean, j: number) => {
         if (x === true) {
           this.ctx.beginPath();
-          this.ctx.fillStyle = `blue`;
+          this.ctx.fillStyle = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(
+            Math.random() * 256
+          )})`;
           this.ctx.rect(width * j, height * i, width, height);
           this.ctx.fill();
           this.ctx.closePath();
