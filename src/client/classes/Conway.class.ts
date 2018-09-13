@@ -5,11 +5,11 @@ function bool_by_percent(per: number): boolean {
 export class Conway {
   private game_width: number;
   private game_height: number;
-  private canvas: any;
+  private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
-  private state: any[];
-  public canvasx_in_pixels: number;
-  public canvasy_in_pixels: number;
+  private state: Array<boolean[]>;
+  private canvasx_in_pixels: number;
+  private canvasy_in_pixels: number;
   constructor(x: number, y: number, percentage: number, canvas: any, width: number, height: number) {
     this.game_width = x;
     this.game_height = y;
@@ -20,16 +20,16 @@ export class Conway {
     this.ctx = this.canvas.getContext('2d');
     this.setBlockSize(width, height);
   }
-  public turn = () => {
+  public turn = (): void => {
     if (this.state.length === 0) {
       return;
     }
-    let newState: any[] = this.generation(this.state);
+    const newState: Array<boolean[]> = this.generation(this.state);
     this.state.splice(0, this.state.length);
     this.state = this.state.concat(newState);
     this.render(this.state);
   };
-  public render = (gen: any[]): void => {
+  private render = (gen: Array<boolean[]>): void => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     let width: number = Math.floor(this.canvasx_in_pixels / this.game_width);
     let height: number = Math.floor(this.canvasy_in_pixels / this.game_height);
@@ -47,7 +47,7 @@ export class Conway {
       });
     });
   };
-  public generation = (prev: any[]): any[] => {
+  private generation = (prev: Array<boolean[]>): Array<boolean[]> => {
     let newArr: any[] = [];
     prev.forEach((col: any[], y) => {
       let line: any[] = [];
@@ -58,8 +58,8 @@ export class Conway {
     });
     return newArr;
   };
-  private rule = (x: number, y: number, alive: boolean, prev: any[]): boolean => {
-    const living = this.living_neighbors(x, y, prev);
+  private rule = (x: number, y: number, alive: boolean, prev: Array<boolean[]>): boolean => {
+    const living: number = this.living_neighbors(x, y, prev);
     if (alive) {
       if (living < 2 || living > 3) {
         //Any live cell with fewer than two live neighbors dies, as if by under population.
@@ -76,7 +76,7 @@ export class Conway {
       return false;
     }
   };
-  private living_neighbors = (posx: number, posy: number, prev: any[]): number => {
+  private living_neighbors = (posx: number, posy: number, prev: Array<boolean[]>): number => {
     // returns the amount of 'living' neighbors
     let living: number = 0;
     for (let y = posy - 1; y <= posy + 1; y++) {
@@ -92,7 +92,7 @@ export class Conway {
     }
     return living;
   };
-  private start_state(x: number, y: number, percentage: number): any[] {
+  private start_state(x: number, y: number, percentage: number): Array<boolean[]> {
     let state: any[] = [];
     for (let i = 0; i < y; i++) {
       state.push([]);
