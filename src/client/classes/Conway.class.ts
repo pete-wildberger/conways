@@ -60,21 +60,7 @@ export class Conway {
   };
   private rule = (x: number, y: number, alive: boolean, prev: Array<boolean[]>): boolean => {
     const living: number = this.living_neighbors(x, y, prev);
-    if (alive) {
-      if (living < 2 || living > 3) {
-        //Any live cell with fewer than two live neighbors dies, as if by under population.
-        //Any live cell with more than three live neighbors dies, as if by overpopulation.
-        return false;
-      } else if (living === 2 || living === 3) {
-        //Any live cell with two or three live neighbors lives on to the next generation.
-        return true;
-      }
-    } else if (alive === false && living === 3) {
-      //Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
-      return true;
-    } else {
-      return false;
-    }
+      return (living === 2 && alive) || living === 3;
   };
   private living_neighbors = (posx: number, posy: number, prev: Array<boolean[]>): number => {
     // returns the amount of 'living' neighbors
